@@ -14,11 +14,17 @@ export interface Props {
    */
   expiresAt?: string;
 
+  /**
+   * @title Show days?
+   */
+  showDays?: boolean;
+
   labels?: {
     /**
      * @title Text to show when expired
      */
     expired?: string;
+    days?: string;
     hours?: string;
     minutes?: string;
     seconds?: string;
@@ -57,7 +63,8 @@ const snippet = (expiresAt: string, rootId: string) => {
     const totalHours = (days * 24) + hours;
 
     return {
-      hours: Math.min(totalHours, 99),
+      days,
+      hours,
       minutes,
       seconds,
     };
@@ -73,7 +80,7 @@ const snippet = (expiresAt: string, rootId: string) => {
 
   const start = () =>
     setInterval(() => {
-      const { hours, minutes, seconds } = getDelta();
+      const { days, hours, minutes, seconds } = getDelta();
       const isExpired = hours + minutes + seconds < 0;
 
       if (isExpired) {
@@ -83,6 +90,7 @@ const snippet = (expiresAt: string, rootId: string) => {
         expired && expired.classList.remove("hidden");
         counter && counter.classList.add("hidden");
       } else {
+        setValue(`${rootId}::days`, days);
         setValue(`${rootId}::hours`, hours);
         setValue(`${rootId}::minutes`, minutes);
         setValue(`${rootId}::seconds`, seconds);
@@ -96,16 +104,17 @@ const snippet = (expiresAt: string, rootId: string) => {
 
 function CampaignTimer({
   expiresAt = `${new Date()}`,
+  showDays,
   labels,
   text = "Time left for a campaign to end wth a link",
-  link = { text: "Click me", href: "/hello" },
+  link,
   layout = { textPosition: "Before counter" },
 }: Props) {
   const id = useId();
 
   return (
     <>
-      <div class="bg-accent text-accent-content">
+      <div class="bg-neutral-900 text-neutral-50 -content">
         <div class="container mx-auto flex flex-col lg:flex-row lg:items-center lg:justify-center lg:gap-16 py-4 px-6 gap-4 ">
           {layout?.textPosition !== "After counter" &&
             (
@@ -123,9 +132,20 @@ function CampaignTimer({
           </div>
           <div class="flex gap-8 lg:gap-16 items-center justify-center lg:justify-normal">
             <div id={`${id}::counter`}>
-              <div class="grid grid-flow-col gap-3 text-center auto-cols-max items-center">
-                <div class="flex flex-col text-xs lg:text-sm">
-                  <span class="countdown font-normal text-xl lg:text-2xl">
+              <div class="grid grid-flow-col gap-3 text-center auto-cols-max items-center text-neutral-400 text-5xl">
+                {showDays && (
+                  <>
+                    <div class="flex flex-col text-xs lg:text-sm p-5 bg-neutral-800">
+                      <span class="countdown font-bold text-2xl lg:text-5xl text-red-500">
+                        <span id={`${id}::days`} />
+                      </span>
+                      {labels?.days || ""}
+                    </div>
+                    :
+                  </>
+                )}
+                <div class="flex flex-col text-xs lg:text-sm p-5 bg-neutral-800">
+                  <span class="countdown font-bold text-2xl lg:text-5xl text-red-500">
                     <span id={`${id}::hours`} />
                   </span>
                   {labels?.hours || ""}
@@ -133,8 +153,8 @@ function CampaignTimer({
                 <div>
                   :
                 </div>
-                <div class="flex flex-col text-xs lg:text-sm">
-                  <span class="countdown font-normal text-xl lg:text-2xl">
+                <div class="flex flex-col text-xs lg:text-sm p-5 bg-neutral-800">
+                  <span class="countdown font-bold text-2xl lg:text-5xl text-red-500">
                     <span id={`${id}::minutes`} />
                   </span>
                   {labels?.minutes || ""}
@@ -142,8 +162,8 @@ function CampaignTimer({
                 <div>
                   :
                 </div>
-                <div class="flex flex-col text-xs lg:text-sm">
-                  <span class="countdown font-normal text-xl lg:text-2xl">
+                <div class="flex flex-col text-xs lg:text-sm p-5 bg-neutral-800">
+                  <span class="countdown font-bold text-2xl lg:text-5xl text-red-500">
                     <span id={`${id}::seconds`} />
                   </span>
                   {labels?.seconds || ""}
@@ -159,13 +179,15 @@ function CampaignTimer({
               dangerouslySetInnerHTML={{ __html: text }}
             >
             </div>
-            <a
-              class="btn"
-              aria-label={link.text}
-              href={link.href}
-            >
-              {link.text}
-            </a>
+            {link && link.text && (
+              <a
+                class="btn"
+                aria-label={link.text}
+                href={link.href}
+              >
+                {link.text}
+              </a>
+            )}
           </div>
           <div
             class={`lg:hidden text-sm text-center lg:text-xl lg:text-left lg:max-w-lg ${
