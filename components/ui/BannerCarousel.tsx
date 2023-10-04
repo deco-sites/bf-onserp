@@ -95,7 +95,7 @@ function BannerItem({ image, lcp }: { image: Banner; lcp?: boolean }) {
   } = image;
 
   return (
-    <a
+    <div
       href={action?.href ?? "#"}
       aria-label={action?.label}
       class="relative h-[600px] overflow-y-hidden w-full"
@@ -123,17 +123,28 @@ function BannerItem({ image, lcp }: { image: Banner; lcp?: boolean }) {
         />
       </Picture>
       {action && (
-        <div class="absolute h-min top-0 bottom-0 m-auto left-0 right-0 sm:right-auto sm:left-[12%] max-h-min max-w-[235px] flex flex-col gap-4 p-4 rounded glass">
-          <span class="text-6xl font-medium text-base-100">
-            {action.title}
-          </span>
+        <div class="absolute h-min top-0 bottom-0 m-auto left-0 right-0 sm:right-auto sm:left-[12%] max-h-min max-w-[235px] lg:max-w-[380px] flex flex-col gap-4 p-4">
           <span class="font-medium text-xl text-base-100">
             {action.subTitle}
           </span>
-          <Button class="glass">{action.label}</Button>
+          <span class="text-6xl font-medium text-base-100">
+            {action.title}
+          </span>
+          <a
+            href={action.href}
+            class="underline text-xl text-white underline-offset-8 flex items-center gap-2"
+          >
+            {action.label}
+            <Icon
+              id="ArrowRight"
+              width={24}
+              height={24}
+              class="stroke-current"
+            />
+          </a>
         </div>
       )}
-    </a>
+    </div>
   );
 }
 
@@ -157,7 +168,7 @@ function Dots({ images, interval = 0 }: Props) {
             <Slider.Dot index={index}>
               <div class="py-5">
                 <div
-                  class="w-16 sm:w-20 h-0.5 rounded group-disabled:animate-progress bg-gradient-to-r from-base-100 from-[length:var(--dot-progress)] to-[rgba(255,255,255,0.4)] to-[length:var(--dot-progress)]"
+                  class="w-2 h-2 rounded-full group-disabled:bg-red-500 bg-white"
                   style={{ animationDuration: `${interval}s` }}
                 />
               </div>
