@@ -13,7 +13,12 @@ export default function MenuButton() {
         displayMenu.value = true;
       }}
     >
-      <Icon id="Bars3" size={24} strokeWidth={0.01} />
+      <Icon
+        id="Bars3"
+        size={24}
+        strokeWidth={0.01}
+        class="fill-current text-white"
+      />
     </Button>
   );
 }

@@ -37,7 +37,7 @@ function Menu({ items }: Props) {
         ))}
       </ul>
 
-      <ul class="flex flex-col py-2 bg-base-200">
+      <ul class="flex flex-col py-2 bg-black">
         <li>
           <a
             class="flex items-center gap-4 px-4 py-2"
