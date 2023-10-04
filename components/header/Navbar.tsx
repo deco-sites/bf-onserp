@@ -22,7 +22,7 @@ function Navbar({ items, searchbar, logo }: {
 
   return (
     <>
-      <div class="flex flex-row items-center border-b border-base-200 w-full pl-2 pr-6">
+      <div class="flex flex-row items-center w-full pl-2 pr-6">
         <div class="flex flex-1">
           <MenuButton />
         </div>
