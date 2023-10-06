@@ -8,6 +8,8 @@ import type { ImageWidget } from "apps/admin/widgets.ts";
 export interface Category {
   tag?: string;
   label: string;
+  description?: string;
+  buttonText?: string;
   href?: string;
   image?: ImageWidget;
 }
@@ -20,23 +22,22 @@ export interface Props {
   list?: Category[];
   layout?: {
     headerAlignment?: "center" | "left";
+    gridLayout?: "metro" | "grid";
   };
 }
 
 function Card(
-  { tag, label, image, href }: {
-    tag?: string;
-    label?: string;
-    image?: ImageWidget;
-    href?: string;
-  },
+  { tag, label, description, image, buttonText, href }: Category,
 ) {
   return (
-    <a class="relative bg-neutral-800 flex flex-col gap-4" href={href || "#"}>
+    <a
+      class="relative bg-neutral-800 flex flex-col gap-4 h-full"
+      href={href || "#"}
+    >
       <Image
         src={image || ""}
         alt={label || ""}
-        class="w-full h-44 object-scale-down object-right"
+        class="w-full h-full object-scale-down object-right"
         width={200}
         height={200}
       />
@@ -72,6 +73,7 @@ function CategoryGrid(props: Props) {
     ],
     layout = {
       headerAlignment: "center",
+      gridLayout: "grid",
     },
   } = props;
 
@@ -79,7 +81,7 @@ function CategoryGrid(props: Props) {
     <div class="text-white bg-neutral-900">
       <div
         id={id}
-        class="container py-8 flex flex-col gap-8 lg:gap-10 lg:py-10"
+        class="container px-4 py-8 flex flex-col gap-8 lg:gap-10 md:px-0 lg:py-10"
       >
         <Header
           title={header.title}
@@ -88,16 +90,51 @@ function CategoryGrid(props: Props) {
           fontSize="Normal"
         />
 
-        <div class="grid lg:grid-cols-3 gap-8">
-          {list.map((item) => (
-            <Card
-              href={item.href}
-              image={item.image}
-              tag={item.tag}
-              label={item.label}
-            />
-          ))}
-        </div>
+        {layout.gridLayout === "metro"
+          ? (
+            <div class="grid grid-rows-5 md:grid-cols-[2fr_1fr_1fr] md:grid-rows-2 gap-8">
+              {list.map((item, index) => {
+                const isBig = (index + 1) % 4 === 1;
+                const isMedium = (index + 1) % 4 === 2;
+                return (
+                  (
+                    <div
+                      class={`${
+                        isBig
+                          ? "row-span-2 "
+                          : isMedium
+                          ? "md:col-span-2 h-44 md:h-80"
+                          : "h-44 md:h-80 bg-gradient"
+                      }`}
+                    >
+                      <Card
+                        href={item.href}
+                        image={item.image}
+                        tag={item.tag}
+                        label={item.label}
+                        description={item.description}
+                        buttonText={item.buttonText}
+                      />
+                    </div>
+                  )
+                );
+              })}
+            </div>
+          )
+          : (
+            <div class="grid md:grid-cols-3 gap-8">
+              {list.map((item) => (
+                <div class="h-44">
+                  <Card
+                    href={item.href}
+                    image={item.image}
+                    tag={item.tag}
+                    label={item.label}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
       </div>
     </div>
   );
