@@ -8,6 +8,7 @@ import { useVariantPossibilities } from "$store/sdk/useVariantPossiblities.ts";
 import type { Product } from "apps/commerce/types.ts";
 import { mapProductToAnalyticsItem } from "apps/commerce/utils/productToAnalyticsItem.ts";
 import Image from "apps/website/components/Image.tsx";
+import Icon from "$store/components/ui/Icon.tsx";
 
 export interface Layout {
   basics?: {
@@ -25,6 +26,7 @@ export interface Layout {
     allPrices?: boolean;
     installments?: boolean;
     skuSelector?: boolean;
+    rating?: boolean;
     cta?: boolean;
   };
   onMouseOver?: {
@@ -67,6 +69,7 @@ function ProductCard(
     image: images,
     offers,
     isVariantOf,
+    aggregateRating,
   } = product;
   const id = `product-card-${productID}`;
   const hasVariant = isVariantOf?.hasVariant ?? [];
@@ -233,13 +236,13 @@ function ProductCard(
             <div class="flex flex-col gap-0">
               {l?.hide?.productName ? "" : (
                 <h2
-                  class="truncate text-base lg:text-lg text-base-content"
+                  class="truncate text-base lg:text-lg text-white"
                   dangerouslySetInnerHTML={{ __html: name ?? "" }}
                 />
               )}
               {l?.hide?.productDescription ? "" : (
                 <div
-                  class="truncate text-sm lg:text-sm text-neutral"
+                  class="truncate text-sm lg:text-sm text-white"
                   dangerouslySetInnerHTML={{ __html: description ?? "" }}
                 />
               )}
@@ -255,13 +258,13 @@ function ProductCard(
               } ${align === "center" ? "justify-center" : "justify-start"}`}
             >
               <div
-                class={`line-through text-base-300 text-xs ${
+                class={`line-through text-base-300 text-sm font-semibold ${
                   l?.basics?.oldPriceSize === "Normal" ? "lg:text-xl" : ""
                 }`}
               >
                 {formatPrice(listPrice, offers?.priceCurrency)}
               </div>
-              <div class="text-accent text-base lg:text-xl">
+              <div class="text-red-500 text-base lg:text-xl font-semibold">
                 {formatPrice(price, offers?.priceCurrency)}
               </div>
             </div>
@@ -270,6 +273,32 @@ function ProductCard(
               : (
                 <div class="text-base-300 text-sm lg:text-base truncate">
                   ou {installments}
+                </div>
+              )}
+
+            {/* Rating */}
+            {l?.hide?.rating
+              ? ""
+              : (
+                <div class="flex items-center-justify-start text-sm">
+                  {aggregateRating?.ratingValue && (
+                    <>
+                      {Array(Math.floor(aggregateRating.ratingValue)).fill(null)
+                        .map(
+                          () => (
+                            <Icon
+                              id="Star"
+                              width={16}
+                              height={16}
+                              class="text-amber-400 fill-current"
+                            />
+                          ),
+                        )}
+                      <span class="opacity-50">
+                        ({aggregateRating?.reviewCount})
+                      </span>
+                    </>
+                  )}
                 </div>
               )}
           </div>
