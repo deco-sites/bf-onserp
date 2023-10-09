@@ -283,7 +283,8 @@ function ProductCard(
                 <div class="flex items-center-justify-start text-sm">
                   {aggregateRating?.ratingValue && (
                     <>
-                      {Array(Math.floor(aggregateRating.ratingValue)).fill(null)
+                      {Array(-Math.round(-aggregateRating.ratingValue))
+                        .fill(null)
                         .map(
                           () => (
                             <Icon

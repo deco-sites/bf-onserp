@@ -27,7 +27,9 @@ export interface Props {
 }
 
 function Card(
-  { tag, label, description, image, buttonText, href }: Category,
+  { tag, label, description, image, buttonText, href, layout = "grid", imageSize = "small" }:
+    & Category
+    & { layout?: "metro" | "grid", imageSize?: "small" | "large" },
 ) {
   return (
     <a
@@ -37,19 +39,29 @@ function Card(
       <Image
         src={image || ""}
         alt={label || ""}
-        class="w-full h-full object-scale-down object-right"
-        width={200}
-        height={200}
+        class={`w-full h-full ${imageSize === 'small' ? 'object-scale-down object-right' : 'object-cover'}`}
+        width={imageSize === 'small' ? 200 : 500}
+        height={imageSize === 'small' ? 200 : 500}
       />
       {tag && <div class="badge text-white bg-red-500">{tag}</div>}
-      {label &&
-        (
-          <div
-            class={`absolute px-7 lg:px-8 w-full h-full top-0 left-0 flex items-center`}
-          >
-            <h3 class="text-left text-lg text-neutral-50">{label}</h3>
+      <div
+        class={`absolute p-7 lg:p-8 w-full h-full top-0 left-0 flex flex-col ${
+          layout === "metro" ? "justify-end" : "justify-center"
+        }`}
+      >
+        {label &&
+          <h3 class="text-left text-lg text-neutral-50">{label}</h3>}
+        {description && (
+          <p class="text-left text-sm text-neutral-50">{description}</p>
+        )}
+        {buttonText && (
+          <div class="flex justify-start mt-4">
+            <span class="text-base text-neutral-50 underline">
+              {buttonText}
+            </span>
           </div>
         )}
+      </div>
     </a>
   );
 }
@@ -101,10 +113,10 @@ function CategoryGrid(props: Props) {
                     <div
                       class={`${
                         isBig
-                          ? "row-span-2 "
+                          ? "row-span-2 max-h-[600px]"
                           : isMedium
-                          ? "md:col-span-2 h-44 md:h-80"
-                          : "h-44 md:h-80 bg-gradient"
+                          ? "md:col-span-2 h-44 md:h-auto max-h-[284px]"
+                          : "h-44 md:h-auto max-h-[284px]"
                       }`}
                     >
                       <Card
@@ -114,6 +126,8 @@ function CategoryGrid(props: Props) {
                         label={item.label}
                         description={item.description}
                         buttonText={item.buttonText}
+                        layout="metro"
+                        imageSize={isBig ? "large" : "small"}
                       />
                     </div>
                   )
