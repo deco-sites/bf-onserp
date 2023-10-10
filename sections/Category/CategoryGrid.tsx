@@ -8,6 +8,8 @@ import type { ImageWidget } from "apps/admin/widgets.ts";
 export interface Category {
   tag?: string;
   label: string;
+  description?: string;
+  buttonText?: string;
   href?: string;
   image?: ImageWidget;
 }
@@ -20,35 +22,46 @@ export interface Props {
   list?: Category[];
   layout?: {
     headerAlignment?: "center" | "left";
+    gridLayout?: "metro" | "grid";
   };
 }
 
 function Card(
-  { tag, label, image, href }: {
-    tag?: string;
-    label?: string;
-    image?: ImageWidget;
-    href?: string;
-  },
+  { tag, label, description, image, buttonText, href, layout = "grid", imageSize = "small" }:
+    & Category
+    & { layout?: "metro" | "grid", imageSize?: "small" | "large" },
 ) {
   return (
-    <a class="relative bg-neutral-800 flex flex-col gap-4" href={href || "#"}>
+    <a
+      class="relative bg-neutral-800 flex flex-col gap-4 h-full"
+      href={href || "#"}
+    >
       <Image
         src={image || ""}
         alt={label || ""}
-        class="w-full h-44 object-scale-down object-right"
-        width={200}
-        height={200}
+        class={`w-full h-full ${imageSize === 'small' ? 'object-scale-down object-right' : 'object-cover'}`}
+        width={imageSize === 'small' ? 200 : 500}
+        height={imageSize === 'small' ? 200 : 500}
       />
       {tag && <div class="badge text-white bg-red-500">{tag}</div>}
-      {label &&
-        (
-          <div
-            class={`absolute px-7 lg:px-8 w-full h-full top-0 left-0 flex items-center`}
-          >
-            <h3 class="text-left text-lg text-neutral-50">{label}</h3>
+      <div
+        class={`absolute p-7 lg:p-8 w-full h-full top-0 left-0 flex flex-col ${
+          layout === "metro" ? "justify-end" : "justify-center"
+        }`}
+      >
+        {label &&
+          <h3 class="text-left text-lg text-neutral-50">{label}</h3>}
+        {description && (
+          <p class="text-left text-sm text-neutral-50">{description}</p>
+        )}
+        {buttonText && (
+          <div class="flex justify-start mt-4">
+            <span class="text-base text-neutral-50 underline">
+              {buttonText}
+            </span>
           </div>
         )}
+      </div>
     </a>
   );
 }
@@ -72,6 +85,7 @@ function CategoryGrid(props: Props) {
     ],
     layout = {
       headerAlignment: "center",
+      gridLayout: "grid",
     },
   } = props;
 
@@ -79,7 +93,7 @@ function CategoryGrid(props: Props) {
     <div class="text-white bg-neutral-900">
       <div
         id={id}
-        class="container py-8 flex flex-col gap-8 lg:gap-10 lg:py-10"
+        class="container px-4 py-8 flex flex-col gap-8 lg:gap-10 md:px-0 lg:py-10"
       >
         <Header
           title={header.title}
@@ -88,16 +102,53 @@ function CategoryGrid(props: Props) {
           fontSize="Normal"
         />
 
-        <div class="grid lg:grid-cols-3 gap-8">
-          {list.map((item) => (
-            <Card
-              href={item.href}
-              image={item.image}
-              tag={item.tag}
-              label={item.label}
-            />
-          ))}
-        </div>
+        {layout.gridLayout === "metro"
+          ? (
+            <div class="grid grid-rows-5 md:grid-cols-[2fr_1fr_1fr] md:grid-rows-2 gap-8">
+              {list.map((item, index) => {
+                const isBig = (index + 1) % 4 === 1;
+                const isMedium = (index + 1) % 4 === 2;
+                return (
+                  (
+                    <div
+                      class={`${
+                        isBig
+                          ? "row-span-2 max-h-[600px]"
+                          : isMedium
+                          ? "md:col-span-2 h-44 md:h-auto max-h-[284px]"
+                          : "h-44 md:h-auto max-h-[284px]"
+                      }`}
+                    >
+                      <Card
+                        href={item.href}
+                        image={item.image}
+                        tag={item.tag}
+                        label={item.label}
+                        description={item.description}
+                        buttonText={item.buttonText}
+                        layout="metro"
+                        imageSize={isBig ? "large" : "small"}
+                      />
+                    </div>
+                  )
+                );
+              })}
+            </div>
+          )
+          : (
+            <div class="grid md:grid-cols-3 gap-8">
+              {list.map((item) => (
+                <div class="h-44">
+                  <Card
+                    href={item.href}
+                    image={item.image}
+                    tag={item.tag}
+                    label={item.label}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
       </div>
     </div>
   );
