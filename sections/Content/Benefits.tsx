@@ -47,38 +47,41 @@ export default function Benefits(
     return (
       <div
         class={`${
-          reverse ? "bg-primary text-primary-content p-4 lg:px-8 lg:py-4" : ""
-        } flex gap-4 ${
-          benefitLayout == "piledup" ? "flex-col items-center text-center" : ""
-        } ${
-          showDivider && benefitLayout !== "piledup"
-            ? "border-b border-neutral-300"
+          reverse ? "bg-neutral-300 text-neutral-900 p-4 lg:px-8 lg:py-4" : ""
+        } flex gap-4 flex-col items-center text-center ${
+          showDivider && benefitLayout !== "tiled"
+            ? "pb-4 lg:pr-8 lg:border-r lg:border-b-0"
             : ""
-        } ${showDivider ? "pb-4 lg:pr-8 lg:border-r lg:border-b-0" : ""} ${
-          showDivider && !reverse ? "lg:pb-0" : ""
-        }`}
+        } ${showDivider && !reverse ? "lg:pb-0" : ""}`}
       >
-        <div class="flex-none">
+        <div
+          class={`flex-none ${
+            benefitLayout === "tiled"
+              ? "rounded-full p-[6px] bg-black border-[5px] border-neutral-600"
+              : ""
+          }`}
+        >
           <Icon
             id={benefit.icon}
-            class={reverse ? "text-base-100" : "text-primary"}
+            class={reverse ? "text-neutral-900" : "text-white"}
             width={36}
             height={36}
             strokeWidth={0.01}
             fill="currentColor"
+            stroke="currentColor"
           />
         </div>
         <div class="flex-auto flex flex-col gap-1 lg:gap-2">
           <div
             class={`text-base lg:text-xl leading-7 ${
-              reverse ? "text-base-100" : "text-base-content"
+              reverse ? "text-neutral-900" : "text-white"
             }`}
           >
             {benefit.label}
           </div>
           <p
             class={`text-sm leading-5 ${
-              reverse ? "text-base-100" : "text-neutral"
+              reverse ? "text-neutral-900" : "text-neutral-400"
             } ${benefitLayout == "piledup" ? "hidden lg:block" : ""}`}
           >
             {benefit.description}
@@ -89,10 +92,10 @@ export default function Benefits(
   });
 
   return (
-    <>
+    <div class="bg-neutral-900">
       {!layout?.variation || layout?.variation === "Simple"
         ? (
-          <div class="w-full container px-4 py-8 flex flex-col gap-8 lg:gap-10 lg:py-10 lg:px-0">
+          <div class="w-full container px-4 py-12 flex flex-col gap-8 lg:gap-10 lg:py-10 lg:px-0">
             <Header
               title={title}
               description={description}
@@ -134,6 +137,6 @@ export default function Benefits(
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }
