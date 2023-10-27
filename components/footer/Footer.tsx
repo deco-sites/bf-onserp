@@ -11,6 +11,7 @@ import Social from "$store/components/footer/Social.tsx";
 import Newsletter from "$store/islands/Newsletter.tsx";
 import type { ImageWidget } from "apps/admin/widgets.ts";
 import PoweredByDeco from "apps/website/components/PoweredByDeco.tsx";
+import PoweredByOnSERP from "$store/components/footer/PoweredByOnSERP.tsx"
 
 export type Item = {
   label: string;
@@ -237,6 +238,7 @@ function Footer({
             </div>
             <Divider />
             <div class="flex flex-col-reverse md:flex-row md:justify-between gap-10">
+              <PoweredByOnSERP />
               <PoweredByDeco />
               {_links}
             </div>
@@ -259,6 +261,7 @@ function Footer({
             </div>
             <Divider />
             <div class="flex flex-col-reverse md:flex-row md:justify-between gap-10">
+            <PoweredByOnSERP />
               <PoweredByDeco />
               {_links}
             </div>
@@ -285,6 +288,7 @@ function Footer({
             </div>
             <Divider />
             <div class="flex flex-col-reverse md:flex-row md:justify-between gap-10">
+            <PoweredByOnSERP />
               <PoweredByDeco />
               {_links}
             </div>
@@ -314,6 +318,7 @@ function Footer({
             <Divider />
             <div class="flex flex-col md:flex-row md:justify-between gap-10 md:items-center">
               {_logo}
+              <PoweredByOnSERP />
               <PoweredByDeco />
             </div>
           </div>
