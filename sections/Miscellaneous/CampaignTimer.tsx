@@ -135,38 +135,46 @@ function CampaignTimer({
               <div class="grid grid-flow-col gap-3 text-center auto-cols-max items-center text-neutral-400 text-5xl">
                 {showDays && (
                   <>
-                    <div class="flex flex-col text-xs lg:text-sm p-5 bg-neutral-800">
-                      <span class="countdown font-bold text-2xl lg:text-5xl text-red-500">
+                    <div class="flex flex-col text-xs lg:text-sm p-3 lg:p-5 bg-neutral-800 w-14 sm:w-auto">
+                      <span class="countdown font-bold text-xl sm:text-2xl lg:text-5xl text-red-500 m-auto">
                         <span id={`${id}::days`} />
                       </span>
-                      {labels?.days || ""}
+                      <span class="text-ellipsis overflow-hidden">
+                        {labels?.days || ""}
+                      </span>
                     </div>
                     :
                   </>
                 )}
-                <div class="flex flex-col text-xs lg:text-sm p-5 bg-neutral-800">
-                  <span class="countdown font-bold text-2xl lg:text-5xl text-red-500">
+                <div class="flex flex-col text-xs lg:text-sm p-3 lg:p-5 bg-neutral-800 w-14 sm:w-auto">
+                  <span class="countdown font-bold text-xl sm:text-2xl lg:text-5xl text-red-500 m-auto">
                     <span id={`${id}::hours`} />
                   </span>
-                  {labels?.hours || ""}
+                  <span class="text-ellipsis overflow-hidden">
+                    {labels?.hours || ""}
+                  </span>
                 </div>
                 <div>
                   :
                 </div>
-                <div class="flex flex-col text-xs lg:text-sm p-5 bg-neutral-800">
-                  <span class="countdown font-bold text-2xl lg:text-5xl text-red-500">
+                <div class="flex flex-col text-xs lg:text-sm p-3 lg:p-5 bg-neutral-800 w-14 sm:w-auto">
+                  <span class="countdown font-bold text-xl sm:text-2xl lg:text-5xl text-red-500 m-auto">
                     <span id={`${id}::minutes`} />
                   </span>
-                  {labels?.minutes || ""}
+                  <span class="text-ellipsis overflow-hidden">
+                    {labels?.minutes || ""}
+                  </span>
                 </div>
                 <div>
                   :
                 </div>
-                <div class="flex flex-col text-xs lg:text-sm p-5 bg-neutral-800">
-                  <span class="countdown font-bold text-2xl lg:text-5xl text-red-500">
+                <div class="flex flex-col text-xs lg:text-sm p-3 lg:p-5 bg-neutral-800 w-14 sm:w-auto">
+                  <span class="countdown font-bold text-xl sm:text-2xl lg:text-5xl text-red-500 m-auto">
                     <span id={`${id}::seconds`} />
                   </span>
-                  {labels?.seconds || ""}
+                  <span class="text-ellipsis overflow-hidden">
+                    {labels?.seconds || ""}
+                  </span>
                 </div>
               </div>
             </div>
